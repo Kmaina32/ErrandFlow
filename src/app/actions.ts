@@ -7,7 +7,6 @@ import {
   type ErrandPriceRecommendationOutput,
 } from '@/ai/flows/errand-price-recommendation';
 import { db } from '@/lib/firebase';
-import { firebaseConfig } from '@/lib/firebase-config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export type ErrandRequest = ErrandPriceRecommendationInput & {
@@ -18,10 +17,6 @@ export type ErrandRequest = ErrandPriceRecommendationInput & {
 export async function submitErrandRequest(
   input: ErrandPriceRecommendationInput
 ): Promise<ErrandPriceRecommendationOutput> {
-  // Check if Firebase config is set up
-  if (!firebaseConfig.projectId || firebaseConfig.projectId === 'your-project-id') {
-      throw new Error('Firebase project is not configured. Please add your Firebase configuration to src/lib/firebase-config.ts.');
-  }
 
   try {
     // 1. Get AI price recommendation

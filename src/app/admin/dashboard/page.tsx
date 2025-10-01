@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Badge } from '@/components/ui/badge';
+import { Package, CheckCircle, Clock } from 'lucide-react';
 
 type ErrandRequest = {
   id: string;
@@ -54,20 +55,23 @@ async function getErrandRequests(): Promise<ErrandRequest[]> {
         taskType: data.taskType,
         pickupLocation: data.pickupLocation,
         dropoffLocation: data.dropoffLocation,
-        status: data.status,
+        status: data.status || 'pending',
         createdAt: data.createdAt,
       };
     });
   } catch (error) {
      console.error('Error fetching errand requests:', error);
-     // In a real app, you'd want to handle this more gracefully
-     // For now, we'll return an empty array to prevent crashing
      return [];
   }
 }
 
 export default async function DashboardPage() {
   const requests = await getErrandRequests();
+
+  const totalRequests = requests.length;
+  const pendingRequests = requests.filter(req => req.status === 'pending').length;
+  const completedRequests = requests.filter(req => req.status === 'completed').length;
+
 
   const formatTimestamp = (timestamp: Timestamp | Date | undefined) => {
     if (!timestamp) return 'N/A';
@@ -81,13 +85,59 @@ export default async function DashboardPage() {
     });
   };
 
+  const getStatusBadge = (status: ErrandRequest['status']) => {
+    switch (status) {
+      case 'pending':
+        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Pending</Badge>;
+      case 'in-progress':
+        return <Badge variant="default" className="bg-blue-100 text-blue-800">In Progress</Badge>;
+      case 'completed':
+        return <Badge variant="default" className="bg-green-100 text-green-800">Completed</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  }
+
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
+    <div className="flex min-h-screen w-full flex-col bg-muted/40 text-foreground">
       <Header />
-      <main className="flex-1 p-4 md:p-8">
+      <main className="flex-1 p-4 md:p-8 space-y-8">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                    <Package className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{totalRequests}</div>
+                    <p className="text-xs text-muted-foreground">All errands submitted over time</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{pendingRequests}</div>
+                    <p className="text-xs text-muted-foreground">Errands waiting for a rider</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Completed Errands</CardTitle>
+                    <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{completedRequests}</div>
+                    <p className="text-xs text-muted-foreground">Successfully delivered errands</p>
+                </CardContent>
+            </Card>
+        </div>
+
         <Card>
           <CardHeader>
-            <CardTitle>Admin Dashboard</CardTitle>
+            <CardTitle>All Errand Requests</CardTitle>
             <CardDescription>View and manage all incoming errand requests.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -96,32 +146,32 @@ export default async function DashboardPage() {
                 No errand requests found.
               </div>
             ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Dispatcher</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Task</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Submitted At</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {requests.map((request) => (
-                  <TableRow key={request.id}>
-                    <TableCell className="font-medium">{request.dispatcherName}</TableCell>
-                    <TableCell>{request.dispatcherPhone}</TableCell>
-                    <TableCell>{request.taskType}</TableCell>
-                    <TableCell>
-                      <Badge variant={request.status === 'pending' ? 'secondary' : 'default'}>
-                        {request.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{formatTimestamp(request.createdAt)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <div className="overflow-x-auto">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead>Dispatcher</TableHead>
+                    <TableHead>Contact</TableHead>
+                    <TableHead className="hidden md:table-cell">Task</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="hidden lg:table-cell">Submitted At</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {requests.map((request) => (
+                    <TableRow key={request.id}>
+                        <TableCell className="font-medium">{request.dispatcherName}</TableCell>
+                        <TableCell>{request.dispatcherPhone}</TableCell>
+                        <TableCell className="hidden md:table-cell">{request.taskType}</TableCell>
+                        <TableCell>
+                            {getStatusBadge(request.status)}
+                        </TableCell>
+                        <TableCell className="hidden lg:table-cell">{formatTimestamp(request.createdAt)}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </div>
             )}
           </CardContent>
         </Card>

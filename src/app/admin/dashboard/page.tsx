@@ -1,6 +1,4 @@
-
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
+import { supabase } from '@/lib/supabase';
 import {
   Table,
   TableBody,
@@ -28,37 +26,38 @@ type ErrandRequest = {
   pickupLocation: string;
   dropoffLocation: string;
   status: 'pending' | 'in-progress' | 'completed';
-  createdAt: Timestamp;
+  created_at: string;
 };
 
 async function getErrandRequests(): Promise<ErrandRequest[]> {
-  if (!db) {
-    console.log('Firestore is not configured. Returning empty array.');
-    return [];
-  }
-
   try {
-    const requestsRef = collection(db, 'requests');
-    const q = query(requestsRef, orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
+    const { data, error } = await supabase
+      .from('requests')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-    if (querySnapshot.empty) {
+    if (error) {
+      console.error('Error fetching errand requests from Supabase:', error);
       return [];
     }
 
-    return querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        dispatcherName: data.dispatcherName,
-        dispatcherPhone: data.dispatcherPhone,
-        taskType: data.taskType,
-        pickupLocation: data.pickupLocation,
-        dropoffLocation: data.dropoffLocation,
-        status: data.status || 'pending',
-        createdAt: data.createdAt,
-      };
-    });
+    if (!data) {
+      return [];
+    }
+
+    // The data from Supabase needs to be mapped to match the expected prop types.
+    // Specifically `dispatcherName` and `dispatcherPhone`.
+    return data.map((d: any) => ({
+      id: d.id,
+      dispatcherName: d.dispatcherName,
+      dispatcherPhone: d.dispatcherPhone,
+      taskType: d.taskType,
+      pickupLocation: d.pickupLocation,
+      dropoffLocation: d.dropoffLocation,
+      status: d.status || 'pending',
+      created_at: d.created_at,
+    }));
+
   } catch (error) {
      console.error('Error fetching errand requests:', error);
      return [];
@@ -73,9 +72,9 @@ export default async function DashboardPage() {
   const completedRequests = requests.filter(req => req.status === 'completed').length;
 
 
-  const formatTimestamp = (timestamp: Timestamp | Date | undefined) => {
+  const formatTimestamp = (timestamp: string | undefined) => {
     if (!timestamp) return 'N/A';
-    const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+    const date = new Date(timestamp);
     return date.toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -166,7 +165,7 @@ export default async function DashboardPage() {
                         <TableCell>
                             {getStatusBadge(request.status)}
                         </TableCell>
-                        <TableCell className="hidden lg:table-cell">{formatTimestamp(request.createdAt)}</TableCell>
+                        <TableCell className="hidden lg:table-cell">{formatTimestamp(request.created_at)}</TableCell>
                     </TableRow>
                     ))}
                 </TableBody>

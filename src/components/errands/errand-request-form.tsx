@@ -38,6 +38,7 @@ import { type ErrandPriceRecommendationOutput } from '@/ai/flows/errand-price-re
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const formSchema = z.object({
   dispatcherName: z
@@ -46,6 +47,9 @@ const formSchema = z.object({
   dispatcherPhone: z
     .string()
     .min(10, { message: 'Please enter a valid phone number.' }),
+  deliveryType: z.enum(['open', 'verified'], {
+    required_error: 'You need to select a delivery type.',
+  }),
   taskType: z.string().min(1, { message: 'Please select a task type.' }),
   pickupLocation: z
     .string()
@@ -69,7 +73,7 @@ const taskTypes = [
 
 const steps = [
     { id: 'Step 1', name: 'Personal Details', fields: ['dispatcherName', 'dispatcherPhone'] },
-    { id: 'Step 2', name: 'Errand Details', fields: ['taskType', 'notes'] },
+    { id: 'Step 2', name: 'Errand Details', fields: ['deliveryType', 'taskType', 'notes'] },
     { id: 'Step 3', name: 'Locations', fields: ['pickupLocation', 'dropoffLocation'] },
 ];
 
@@ -87,6 +91,7 @@ export function ErrandRequestForm() {
     defaultValues: {
       dispatcherName: '',
       dispatcherPhone: '',
+      deliveryType: 'open',
       taskType: '',
       pickupLocation: '',
       dropoffLocation: '',
@@ -218,6 +223,40 @@ export function ErrandRequestForm() {
                         )}
                         {currentStep === 1 && (
                             <div className="space-y-6">
+                               <FormField
+                                    control={form.control}
+                                    name="deliveryType"
+                                    render={({ field }) => (
+                                        <FormItem className="space-y-3">
+                                        <FormLabel>Delivery Type</FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="flex flex-col space-y-1"
+                                            >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                <RadioGroupItem value="open" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                Open Delivery
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                <RadioGroupItem value="verified" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                Verified Shops Delivery
+                                                </FormLabel>
+                                            </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
                                 <FormField
                                 control={form.control}
                                 name="taskType"

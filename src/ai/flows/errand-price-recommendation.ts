@@ -19,6 +19,7 @@ const ErrandPriceRecommendationInputSchema = z.object({
   notes: z.string().describe('Additional notes or details about the errand.'),
   dispatcherName: z.string().describe('The name of the person dispatching the errand.'),
   dispatcherPhone: z.string().describe('The phone number of the person dispatching the errand.'),
+  deliveryType: z.string().describe('The type of delivery: "open" for any location, or "verified" for a pre-vetted shop.'),
 });
 export type ErrandPriceRecommendationInput = z.infer<typeof ErrandPriceRecommendationInputSchema>;
 
@@ -40,13 +41,14 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert in providing price recommendations for errands in Kenya. Analyze the provided details and provide a recommended price range in Kenyan Shillings (Ksh), and some intelligent prompts to get the best price.
 
 Task Type: {{{taskType}}}
+Delivery Type: {{{deliveryType}}}
 Pickup Location: {{{pickupLocation}}}
 Drop-off Location: {{{dropoffLocation}}}
 Notes: {{{notes}}}
 Dispatcher Name: {{{dispatcherName}}}
 Dispatcher Phone: {{{dispatcherPhone}}}
 
-Base your recommendation on factors such as distance (especially if coordinates are provided), time of day, typical traffic conditions in Kenya, and the effort required for the task. Do not consider any budget from the user. Your goal is to provide a fair, data-driven market rate. Also, generate helpful prompts for the customer to get an even better price. Return the price range as a string (e.g., "Ksh 500 - Ksh 700"), and the prompts as a string.`,
+Base your recommendation on factors such as distance (especially if coordinates are provided), time of day, typical traffic conditions in Kenya, and the effort required for the task. Consider the delivery type: a 'verified' shop may imply a more straightforward pickup process. Do not consider any budget from the user. Your goal is to provide a fair, data-driven market rate. Also, generate helpful prompts for the customer to get an even better price. Return the price range as a string (e.g., "Ksh 500 - Ksh 700"), and the prompts as a string.`,
 });
 
 const errandPriceRecommendationFlow = ai.defineFlow(

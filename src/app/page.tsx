@@ -7,14 +7,14 @@ export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
       <Header />
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-3">
-        {/* Form Section - takes 1/3 on large screens */}
-        <div className="lg:col-span-1 flex flex-col items-start p-4 md:p-6 lg:p-8">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2">
+        {/* Form Section - takes 1/2 on large screens */}
+        <div className="lg:col-span-1 flex flex-col items-start p-4 md:p-6">
             <ErrandRequestForm />
         </div>
 
-        {/* Map Section - takes 2/3 on large screens and is fixed */}
-        <div className="hidden lg:block lg:col-span-2 relative">
+        {/* Map Section - takes 1/2 on large screens and is fixed */}
+        <div className="hidden lg:block lg:col-span-1 relative">
            <div 
              className="absolute inset-0 bg-cover bg-center"
              style={{backgroundImage: "url('https://savvyerrands.com/wp-content/uploads/2024/07/about-1.jpg')"}}

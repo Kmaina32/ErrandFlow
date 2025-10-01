@@ -13,7 +13,10 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-              <div className="flex flex-col justify-center space-y-4">
+              <div className="flex items-start justify-center lg:order-2 lg:items-center">
+                <ErrandRequestForm />
+              </div>
+              <div className="flex flex-col justify-center space-y-4 lg:order-1">
                 <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                   Tumia Kazi, <span className="text-primary">Sorted</span>.
                 </h1>
@@ -33,9 +36,6 @@ export default function Home() {
                     />
                   </div>
                 )}
-              </div>
-              <div className="flex items-start justify-center lg:items-center">
-                <ErrandRequestForm />
               </div>
             </div>
           </div>

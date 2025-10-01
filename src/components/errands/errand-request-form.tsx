@@ -36,6 +36,7 @@ import {
 import { submitErrandRequest } from '@/app/actions';
 import { type ErrandPriceRecommendationOutput } from '@/ai/flows/errand-price-recommendation';
 import { useToast } from '@/hooks/use-toast';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const formSchema = z.object({
   dispatcherName: z
@@ -137,204 +138,207 @@ export function ErrandRequestForm() {
 
 
   return (
-    <Card className="w-full max-w-lg shadow-2xl shadow-primary/10">
-      <CardHeader>
-        <CardTitle className="font-headline text-2xl">
-          Tuma Kazi
-        </CardTitle>
-        <CardDescription>
-          Jaza fomu kupata estimate ya bei sasa hivi.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-               <FormField
-                control={form.control}
-                name="dispatcherName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Juma" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="dispatcherPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., 0712345678" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="taskType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Task Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a type of errand" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {taskTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="pickupLocation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pickup Location</FormLabel>
-                    <div className="relative">
-                      <FormControl>
-                        <Input placeholder="e.g., Nairobi CBD" {...field} />
-                      </FormControl>
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant="ghost"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                        onClick={() => handleGetCurrentLocation('pickupLocation')}
-                        disabled={isLocating}
-                      >
-                        <LocateFixed className="h-5 w-5 text-muted-foreground" />
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="dropoffLocation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Drop-off Location</FormLabel>
-                     <div className="relative">
-                      <FormControl>
-                        <Input placeholder="e.g., Westlands" {...field} />
-                      </FormControl>
-                       <Button
-                        type="button"
-                        size="icon"
-                        variant="ghost"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                        onClick={() => handleGetCurrentLocation('dropoffLocation')}
-                        disabled={isLocating}
-                      >
-                        <LocateFixed className="h-5 w-5 text-muted-foreground" />
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes (Optional)</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="e.g., 'Tafadhali, nunua maziwa lita mbili na mkate.'"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <Button type="submit" className="w-full" disabled={isLoading || isLocating}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analyzing & Submitting...
-                </>
-              ) : isLocating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Getting Location...
-                </>
-              ): (
-                'Submit Errand Request'
-              )}
-            </Button>
-          </form>
-        </Form>
-        {recommendation && (
-          <Card className="mt-6 border-accent bg-accent/10">
+    <ScrollArea className="h-full w-full">
+        <div className="p-1">
+            <Card className="w-full max-w-lg bg-card/80 backdrop-blur-sm border-border/50">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-headline text-xl">
-                <Bot className="h-6 w-6 text-accent" />
-                AI Recommendation
-              </CardTitle>
+                <CardTitle className="font-headline text-2xl">
+                Where to?
+                </CardTitle>
+                <CardDescription>
+                Post an errand and let's get it done.
+                </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-               {recommendation.mapUrl && (
-                  <div className="relative mt-4 aspect-[16/9] w-full overflow-hidden rounded-lg border">
-                     <Image
-                      src={recommendation.mapUrl}
-                      alt="Route map"
-                      width={600}
-                      height={300}
-                      className="object-cover"
+            <CardContent>
+                <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <FormField
+                        control={form.control}
+                        name="dispatcherName"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Your Name</FormLabel>
+                            <FormControl>
+                            <Input placeholder="e.g., Juma" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
                     />
-                  </div>
+                    <FormField
+                        control={form.control}
+                        name="dispatcherPhone"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Your Phone</FormLabel>
+                            <FormControl>
+                            <Input placeholder="e.g., 0712345678" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    </div>
+                    <FormField
+                    control={form.control}
+                    name="taskType"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Task Type</FormLabel>
+                        <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                        >
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select a type of errand" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                            {taskTypes.map((type) => (
+                                <SelectItem key={type} value={type}>
+                                {type}
+                                </SelectItem>
+                            ))}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <div className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="pickupLocation"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Pickup Location</FormLabel>
+                            <div className="relative">
+                            <FormControl>
+                                <Input placeholder="e.g., Nairobi CBD" {...field} />
+                            </FormControl>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                                onClick={() => handleGetCurrentLocation('pickupLocation')}
+                                disabled={isLocating}
+                            >
+                                <LocateFixed className="h-5 w-5 text-muted-foreground" />
+                            </Button>
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="dropoffLocation"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Drop-off Location</FormLabel>
+                            <div className="relative">
+                            <FormControl>
+                                <Input placeholder="e.g., Westlands" {...field} />
+                            </FormControl>
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                                onClick={() => handleGetCurrentLocation('dropoffLocation')}
+                                disabled={isLocating}
+                            >
+                                <LocateFixed className="h-5 w-5 text-muted-foreground" />
+                            </Button>
+                            </div>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    </div>
+                    <FormField
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Notes (Optional)</FormLabel>
+                        <FormControl>
+                            <Textarea
+                            placeholder="e.g., 'Tafadhali, nunua maziwa lita mbili na mkate.'"
+                            className="resize-none"
+                            {...field}
+                            />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    
+                    <Button type="submit" className="w-full" disabled={isLoading || isLocating}>
+                    {isLoading ? (
+                        <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Finding best price...
+                        </>
+                    ) : isLocating ? (
+                        <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Getting Location...
+                        </>
+                    ): (
+                        'Get Price Estimate'
+                    )}
+                    </Button>
+                </form>
+                </Form>
+                {recommendation && (
+                <Card className="mt-6 border-primary/20 bg-primary/5">
+                    <CardHeader>
+                    <CardTitle className="flex items-center gap-2 font-headline text-xl">
+                        <Bot className="h-6 w-6 text-primary" />
+                        AI Recommendation
+                    </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                    {recommendation.mapUrl && (
+                        <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-lg border">
+                            <Image
+                            src={recommendation.mapUrl}
+                            alt="Route map"
+                            fill
+                            className="object-cover"
+                            />
+                        </div>
+                        )}
+                    <div>
+                        <h3 className="font-semibold text-foreground">
+                        Recommended Price
+                        </h3>
+                        <p className="text-3xl font-bold text-primary">
+                        {recommendation.recommendedPriceRange}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                        Based on distance, task complexity, and current demand.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 className="flex items-center gap-2 font-semibold text-foreground">
+                        <Lightbulb className="h-5 w-5 text-yellow-500" />
+                        Pro Tips
+                        </h3>
+                        <p className="text-muted-foreground">
+                        {recommendation.intelligentPrompts}
+                        </p>
+                    </div>
+                    </CardContent>
+                </Card>
                 )}
-              <div>
-                <h3 className="font-semibold text-foreground">
-                  Recommended Price
-                </h3>
-                <p className="text-2xl font-bold text-primary">
-                  {recommendation.recommendedPriceRange}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Based on distance, task complexity, and current demand.
-                </p>
-              </div>
-              <div>
-                <h3 className="flex items-center gap-2 font-semibold text-foreground">
-                  <Lightbulb className="h-5 w-5 text-yellow-500" />
-                  Pro Tips for a Better Price
-                </h3>
-                <p className="text-muted-foreground">
-                  {recommendation.intelligentPrompts}
-                </p>
-              </div>
             </CardContent>
-          </Card>
-        )}
-      </CardContent>
-    </Card>
+            </Card>
+        </div>
+    </ScrollArea>
   );
 }

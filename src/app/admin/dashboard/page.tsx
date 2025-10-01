@@ -37,16 +37,21 @@ async function getErrandRequests(): Promise<ErrandRequest[]> {
       .order('created_at', { ascending: false });
 
     if (error) {
+        // Check for permission errors, which often point to RLS issues.
+        if (error.code === '42501') { // permission_denied in Postgres
+             console.error('Supabase permission error:', error);
+             throw new Error(
+                'Permission denied. Please check your Supabase Row Level Security (RLS) policies for the "requests" table.'
+            );
+        }
       console.error('Error fetching errand requests from Supabase:', error);
-      return [];
+      throw new Error(`Failed to fetch data from Supabase. ${error.message}`);
     }
 
     if (!data) {
       return [];
     }
 
-    // The data from Supabase needs to be mapped to match the expected prop types.
-    // Specifically `dispatcherName` and `dispatcherPhone`.
     return data.map((d: any) => ({
       id: d.id,
       dispatcherName: d.dispatcherName,
@@ -59,13 +64,28 @@ async function getErrandRequests(): Promise<ErrandRequest[]> {
     }));
 
   } catch (error) {
-     console.error('Error fetching errand requests:', error);
-     return [];
+     console.error('Error in getErrandRequests:', error);
+     // Re-throw the error to be caught by Next.js error boundary
+     if (error instanceof Error) {
+        throw error;
+     }
+     throw new Error('An unknown error occurred while fetching errand requests.');
   }
 }
 
 export default async function DashboardPage() {
-  const requests = await getErrandRequests();
+  let requests: ErrandRequest[] = [];
+  let fetchError: Error | null = null;
+  try {
+      requests = await getErrandRequests();
+  } catch (error) {
+      if (error instanceof Error) {
+        fetchError = error;
+      } else {
+        fetchError = new Error('An unknown error occurred.');
+      }
+  }
+
 
   const totalRequests = requests.length;
   const pendingRequests = requests.filter(req => req.status === 'pending').length;
@@ -140,7 +160,12 @@ export default async function DashboardPage() {
             <CardDescription>View and manage all incoming errand requests.</CardDescription>
           </CardHeader>
           <CardContent>
-             {requests.length === 0 ? (
+             {fetchError ? (
+                <div className="text-center text-red-500 py-10">
+                    <p><strong>Error:</strong> {fetchError.message}</p>
+                    <p className="text-sm text-muted-foreground mt-2">This is often caused by missing Row Level Security (RLS) policies on your 'requests' table. Please check your Supabase project settings.</p>
+                </div>
+             ) : requests.length === 0 ? (
               <div className="text-center text-muted-foreground py-10">
                 No errand requests found.
               </div>

@@ -30,6 +30,7 @@ type ErrandRequest = {
 };
 
 async function getErrandRequests(): Promise<ErrandRequest[]> {
+  // Create the Supabase client *inside* the function
   const supabase = createSupabaseClient();
   try {
     const { data, error } = await supabase

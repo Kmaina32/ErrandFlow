@@ -26,7 +26,7 @@ export default function Home() {
                 </p>
                   <div className="relative mt-4 aspect-[16/10] w-full max-w-lg overflow-hidden rounded-xl shadow-lg">
                     <Image
-                      src="https://picsum.photos/seed/1/600/400"
+                      src="https://savvyerrands.com/wp-content/uploads/2024/07/about-1.jpg"
                       alt="A person happily receiving a delivery package at their door."
                       fill
                       className="object-cover"

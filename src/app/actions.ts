@@ -28,6 +28,13 @@ export async function submitErrandRequest(
     const { error } = await supabase.from('requests').insert([requestData]);
 
     if (error) {
+        // Check for permission errors, which often point to RLS issues.
+        if (error.code === '42501') { // permission_denied in Postgres
+             console.error('Supabase permission error:', error);
+             throw new Error(
+                'Permission denied. Please check your Supabase Row Level Security (RLS) policies for the "requests" table.'
+            );
+        }
         console.error('Supabase error:', error);
         throw new Error(`Failed to save errand request to the database. ${error.message}`);
     }

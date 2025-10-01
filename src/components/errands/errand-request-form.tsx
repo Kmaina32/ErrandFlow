@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Loader2, Lightbulb, Bot } from 'lucide-react';
+import { Loader2, Lightbulb, Bot, LocateFixed } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -63,6 +63,7 @@ const taskTypes = [
 
 export function ErrandRequestForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
   const [recommendation, setRecommendation] =
     useState<ErrandPriceRecommendationOutput | null>(null);
   const { toast } = useToast();
@@ -94,6 +95,36 @@ export function ErrandRequestForm() {
       setIsLoading(false);
     }
   }
+
+  const handleGetCurrentLocation = (field: 'pickupLocation' | 'dropoffLocation') => {
+    setIsLocating(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          form.setValue(field, `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+          setIsLocating(false);
+        },
+        (error) => {
+          console.error("Error getting location", error);
+          toast({
+            variant: 'destructive',
+            title: 'Location Error',
+            description: 'Could not get your location. Please enter it manually.',
+          });
+          setIsLocating(false);
+        }
+      );
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Location Error',
+        description: 'Geolocation is not supported by your browser.',
+      });
+      setIsLocating(false);
+    }
+  };
+
 
   return (
     <Card className="w-full max-w-lg shadow-2xl shadow-primary/10">
@@ -142,9 +173,21 @@ export function ErrandRequestForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Pickup Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Westlands" {...field} />
-                    </FormControl>
+                    <div className="relative">
+                      <FormControl>
+                        <Input placeholder="e.g., -1.283, 36.817" {...field} />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                        onClick={() => handleGetCurrentLocation('pickupLocation')}
+                        disabled={isLocating}
+                      >
+                        <LocateFixed className="h-5 w-5 text-muted-foreground" />
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -155,9 +198,21 @@ export function ErrandRequestForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Drop-off Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., South C" {...field} />
-                    </FormControl>
+                     <div className="relative">
+                      <FormControl>
+                        <Input placeholder="e.g., -1.313, 36.839" {...field} />
+                      </FormControl>
+                       <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                        onClick={() => handleGetCurrentLocation('dropoffLocation')}
+                        disabled={isLocating}
+                      >
+                        <LocateFixed className="h-5 w-5 text-muted-foreground" />
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -193,13 +248,18 @@ export function ErrandRequestForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || isLocating}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Analyzing...
                 </>
-              ) : (
+              ) : isLocating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Getting Location...
+                </>
+              ): (
                 'Get Price Recommendation'
               )}
             </Button>

@@ -5,7 +5,7 @@ import {
   type ErrandPriceRecommendationInput,
   type ErrandPriceRecommendationOutput,
 } from '@/ai/flows/errand-price-recommendation';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseClient } from '@/lib/supabase';
 
 export type ErrandRequest = ErrandPriceRecommendationInput & {
   status: 'pending';
@@ -14,6 +14,8 @@ export type ErrandRequest = ErrandPriceRecommendationInput & {
 export async function submitErrandRequest(
   input: ErrandPriceRecommendationInput
 ): Promise<ErrandPriceRecommendationOutput> {
+
+  const supabase = createSupabaseClient();
 
   try {
     // 1. Get AI price recommendation

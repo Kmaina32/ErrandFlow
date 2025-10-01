@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { createSupabaseClient } from '@/lib/supabase';
 import {
   Table,
   TableBody,
@@ -30,6 +30,7 @@ type ErrandRequest = {
 };
 
 async function getErrandRequests(): Promise<ErrandRequest[]> {
+  const supabase = createSupabaseClient();
   try {
     const { data, error } = await supabase
       .from('requests')

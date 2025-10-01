@@ -33,7 +33,7 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { getErrandPriceRecommendation } from '@/app/actions';
+import { submitErrandRequest } from '@/app/actions';
 import { type ErrandPriceRecommendationOutput } from '@/ai/flows/errand-price-recommendation';
 import { useToast } from '@/hooks/use-toast';
 
@@ -88,14 +88,18 @@ export function ErrandRequestForm() {
     setIsLoading(true);
     setRecommendation(null);
     try {
-      // @ts-ignore
-      const result = await getErrandPriceRecommendation(values);
+      const result = await submitErrandRequest(values);
       setRecommendation(result);
+       toast({
+        title: 'Request Submitted!',
+        description: 'Your errand request has been sent to nearby riders.',
+      });
     } catch (error) {
+       const errorMessage = error instanceof Error ? error.message : 'There was a problem with your request. Please try again.';
       toast({
         variant: 'destructive',
         title: 'Oh no! Something went wrong.',
-        description: 'There was a problem with your request. Please try again.',
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -274,7 +278,7 @@ export function ErrandRequestForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analyzing...
+                  Analyzing & Submitting...
                 </>
               ) : isLocating ? (
                 <>
@@ -282,7 +286,7 @@ export function ErrandRequestForm() {
                   Getting Location...
                 </>
               ): (
-                'Get Price Recommendation'
+                'Submit Errand Request'
               )}
             </Button>
           </form>

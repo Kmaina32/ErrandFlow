@@ -99,10 +99,10 @@ export function ErrandRequestForm() {
     <Card className="w-full max-w-lg shadow-2xl shadow-primary/10">
       <CardHeader>
         <CardTitle className="font-headline text-2xl">
-          Request an Errand
+          Tuma Kazi
         </CardTitle>
         <CardDescription>
-          Fill out the details below to get an instant price estimate.
+          Jaza fomu kupata estimate ya bei sasa hivi.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -143,7 +143,7 @@ export function ErrandRequestForm() {
                   <FormItem>
                     <FormLabel>Pickup Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Westlands Mall" {...field} />
+                      <Input placeholder="e.g., Westlands" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,7 +156,7 @@ export function ErrandRequestForm() {
                   <FormItem>
                     <FormLabel>Drop-off Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., My home address" {...field} />
+                      <Input placeholder="e.g., South C" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -171,7 +171,7 @@ export function ErrandRequestForm() {
                   <FormLabel>Notes (Optional)</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="e.g., 'Please buy 2 litres of milk and some bread.'"
+                      placeholder="e.g., 'Tafadhali, nunua maziwa lita mbili na mkate.'"
                       className="resize-none"
                       {...field}
                     />
@@ -187,7 +187,7 @@ export function ErrandRequestForm() {
                 <FormItem>
                   <FormLabel>Your Budget Estimate</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., $10 - $15" {...field} />
+                    <Input placeholder="e.g., Ksh 500 - Ksh 800" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

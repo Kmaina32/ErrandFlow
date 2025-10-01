@@ -15,11 +15,11 @@ export default function Home() {
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
               <div className="flex flex-col justify-center space-y-4">
                 <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Your Errands, <span className="text-primary">Handled</span>.
+                  Tumia Kazi, <span className="text-primary">Sorted</span>.
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Free up your time. Post any errand, from grocery shopping to
-                  parcel pickups, and let our trusted runners take care of it
+                  Pata time yako. Post any errand, from grocery shopping to
+                  parcel pickups, and let our trusted riders take care of it
                   for you.
                 </p>
                 {heroImage && (

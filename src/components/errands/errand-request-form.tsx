@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Loader2, Lightbulb, Bot, LocateFixed } from 'lucide-react';
+import { Loader2, Lightbulb, Bot, LocateFixed, Map } from 'lucide-react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -295,6 +296,17 @@ export function ErrandRequestForm() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+               {recommendation.mapUrl && (
+                  <div className="relative mt-4 aspect-[16/9] w-full overflow-hidden rounded-lg border">
+                     <Image
+                      src={recommendation.mapUrl}
+                      alt="Route map"
+                      width={600}
+                      height={300}
+                      className="object-cover"
+                    />
+                  </div>
+                )}
               <div>
                 <h3 className="font-semibold text-foreground">
                   Recommended Price

@@ -22,18 +22,31 @@ export async function submitErrandRequest(
     // 1. Get AI price recommendation
     const recommendation = await errandPriceRecommendation(input);
 
-    // 2. Save the request to Firestore
-    const requestData: ErrandRequest = {
-      ...input,
-      status: 'pending',
-      createdAt: serverTimestamp(),
-    };
-    await addDoc(collection(db, 'requests'), requestData);
+    // 2. Save the request to Firestore, if configured
+    if (db) {
+        const requestData: ErrandRequest = {
+          ...input,
+          status: 'pending',
+          createdAt: serverTimestamp(),
+        };
+        await addDoc(collection(db, 'requests'), requestData);
+    } else {
+        console.log('Firestore is not configured. Skipping database write.');
+        // We can still return the recommendation to the user
+        // But we might want to inform them the request wasn't saved.
+        // For now, we'll let the toast in the component handle user feedback.
+    }
+
 
     // 3. Return the AI recommendation to the user
     return recommendation;
   } catch (error) {
     console.error('Error in submitErrandRequest:', error);
+    
+    if (!db) {
+        throw new Error('Firebase project is not configured. Please add your Firebase configuration to src/lib/firebase-config.ts.');
+    }
+
     // Check if the error is a Firestore error and provide a more specific message
     if (error instanceof Error && 'code' in error) {
          // @ts-ignore

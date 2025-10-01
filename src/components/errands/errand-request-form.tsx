@@ -91,8 +91,8 @@ export function ErrandRequestForm() {
       const result = await submitErrandRequest(values);
       setRecommendation(result);
        toast({
-        title: 'Request Submitted!',
-        description: 'Your errand request has been sent to nearby riders.',
+        title: 'Price Recommended!',
+        description: "Here is your price estimate. Your request has also been submitted.",
       });
     } catch (error) {
        const errorMessage = error instanceof Error ? error.message : 'There was a problem with your request. Please try again.';

@@ -37,6 +37,12 @@ import { type ErrandPriceRecommendationOutput } from '@/ai/flows/errand-price-re
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
+  dispatcherName: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters.' }),
+  dispatcherPhone: z
+    .string()
+    .min(10, { message: 'Please enter a valid phone number.' }),
   taskType: z.string().min(1, { message: 'Please select a task type.' }),
   pickupLocation: z
     .string()
@@ -71,6 +77,8 @@ export function ErrandRequestForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      dispatcherName: '',
+      dispatcherPhone: '',
       taskType: '',
       pickupLocation: '',
       dropoffLocation: '',
@@ -139,6 +147,34 @@ export function ErrandRequestForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+               <FormField
+                control={form.control}
+                name="dispatcherName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Your Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Juma" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
+                name="dispatcherPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Your Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., 0712345678" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="taskType"

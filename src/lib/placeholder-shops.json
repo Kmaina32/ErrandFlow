@@ -1,0 +1,32 @@
+{
+    "placeholderShops": [
+        {
+            "id": "shop-1",
+            "name": "GloboTech Electronics",
+            "category": "Electronics",
+            "location": "Nairobi CBD",
+            "imageId": "shop-electronics-1"
+        },
+        {
+            "id": "shop-2",
+            "name": "FreshMart Supermarket",
+            "category": "Groceries",
+            "location": "Westlands",
+            "imageId": "shop-supermarket-1"
+        },
+        {
+            "id": "shop-3",
+            "name": "HealthFirst Pharmacy",
+            "category": "Pharmacy",
+            "location": "Kileleshwa",
+            "imageId": "shop-pharmacy-1"
+        },
+        {
+            "id": "shop-4",
+            "name": "BuildRight Hardware",
+            "category": "Hardware",
+            "location": "Industrial Area",
+            "imageId": "shop-hardware-1"
+        }
+    ]
+}

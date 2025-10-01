@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Rabbit, UserCircle } from 'lucide-react';
+import { Rabbit, UserCircle, Store } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Header() {
@@ -13,6 +13,14 @@ export function Header() {
               ErrandFlow
             </span>
           </Link>
+          <nav className="hidden md:flex items-center space-x-2">
+             <Button variant="link" asChild>
+                <Link href="/verified-shops" className="text-muted-foreground hover:text-foreground">
+                    <Store className="mr-2 h-4 w-4" />
+                    Verified Shops
+                </Link>
+             </Button>
+          </nav>
         </div>
         <div className="flex flex-1 items-center justify-end">
           <nav className="flex items-center">

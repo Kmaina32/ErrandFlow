@@ -11,6 +11,30 @@
       "description": "A person is using a mobile phone to book a service, with icons representing different steps.",
       "imageUrl": "https://images.unsplash.com/photo-1585474409683-acb710185482?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxib29raW5nJTIwc2VydmljZSUyMG1vYmlsZXxlbnwwfHx8fDE3NTkzMTg4Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "booking service mobile"
+    },
+    {
+      "id": "shop-electronics-1",
+      "description": "A modern electronics store with various gadgets on display.",
+      "imageUrl": "https://images.unsplash.com/photo-1592296240415-b3400ad7adac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxlbGVjdHJvbmljcyUyMHN0b3JlfGVufDB8fHx8MTc1OTMxOTg4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "electronics store"
+    },
+    {
+      "id": "shop-supermarket-1",
+      "description": "A well-lit aisle in a supermarket with shelves stocked with groceries.",
+      "imageUrl": "https://images.unsplash.com/photo-1604719312497-c6fc196f51ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzdXBlcm1hcmtldCUyMGFpc2xlfGVufDB8fHx8MTc1OTI1NjQ5MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "supermarket aisle"
+    },
+    {
+      "id": "shop-pharmacy-1",
+      "description": "The interior of a clean, modern pharmacy with shelves of medication.",
+      "imageUrl": "https://images.unsplash.com/photo-1758573467057-955f803660a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwaGFybWFjeSUyMGludGVyaW9yfGVufDB8fHx8MTc1OTIyOTY4M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pharmacy interior"
+    },
+    {
+      "id": "shop-hardware-1",
+      "description": "A hardware store with tools and supplies neatly organized on the shelves.",
+      "imageUrl": "https://images.unsplash.com/photo-1519520104014-df63821cb6f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoYXJkd2FyZSUyMHN0b3JlfGVufDB8fHx8MTc1OTMxOTg4NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hardware store"
     }
   ]
 }

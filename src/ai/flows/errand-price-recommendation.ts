@@ -16,7 +16,6 @@ const ErrandPriceRecommendationInputSchema = z.object({
   pickupLocation: z.string().describe('The pickup location for the errand, as "latitude, longitude" or a place name within Kenya.'),
   dropoffLocation: z.string().describe('The drop-off location for the errand, as "latitude, longitude" or a place name within Kenya.'),
   notes: z.string().describe('Additional notes or details about the errand.'),
-  budgetEstimate: z.string().describe('The customer\'s initial budget estimate for the errand in Kenyan Shillings (Ksh).'),
   dispatcherName: z.string().describe('The name of the person dispatching the errand.'),
   dispatcherPhone: z.string().describe('The phone number of the person dispatching the errand.'),
 });
@@ -42,11 +41,10 @@ Task Type: {{{taskType}}}
 Pickup Location: {{{pickupLocation}}}
 Drop-off Location: {{{dropoffLocation}}}
 Notes: {{{notes}}}
-Budget Estimate: {{{budgetEstimate}}}
 Dispatcher Name: {{{dispatcherName}}}
 Dispatcher Phone: {{{dispatcherPhone}}}
 
-Consider factors such as distance (if coordinates are provided), time, traffic, effort, and any special requirements within the Kenyan context to provide an accurate and competitive price range. Also, generate helpful prompts for the customer to get an even better price. Return the price range as a string (e.g., "Ksh 500 - Ksh 700"), and the prompts as a string.`, 
+Base your recommendation on factors such as distance (especially if coordinates are provided), time of day, typical traffic conditions in Kenya, and the effort required for the task. Do not consider any budget from the user. Your goal is to provide a fair, data-driven market rate. Also, generate helpful prompts for the customer to get an even better price. Return the price range as a string (e.g., "Ksh 500 - Ksh 700"), and the prompts as a string.`, 
 });
 
 const errandPriceRecommendationFlow = ai.defineFlow(

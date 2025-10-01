@@ -51,9 +51,6 @@ const formSchema = z.object({
     .string()
     .min(3, { message: 'Drop-off location must be at least 3 characters.' }),
   notes: z.string().optional(),
-  budgetEstimate: z
-    .string()
-    .min(1, { message: 'Please provide a budget estimate.' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -83,7 +80,6 @@ export function ErrandRequestForm() {
       pickupLocation: '',
       dropoffLocation: '',
       notes: '',
-      budgetEstimate: '',
     },
   });
 
@@ -91,6 +87,7 @@ export function ErrandRequestForm() {
     setIsLoading(true);
     setRecommendation(null);
     try {
+      // @ts-ignore
       const result = await getErrandPriceRecommendation(values);
       setRecommendation(result);
     } catch (error) {
@@ -271,19 +268,7 @@ export function ErrandRequestForm() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="budgetEstimate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Your Budget Estimate</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Ksh 500 - Ksh 800" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
             <Button type="submit" className="w-full" disabled={isLoading || isLocating}>
               {isLoading ? (
                 <>

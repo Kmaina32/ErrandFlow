@@ -209,7 +209,7 @@ export function ErrandRequestForm() {
                     <FormLabel>Pickup Location</FormLabel>
                     <div className="relative">
                       <FormControl>
-                        <Input placeholder="e.g., -1.283, 36.817" {...field} />
+                        <Input placeholder="e.g., Nairobi CBD" {...field} />
                       </FormControl>
                       <Button
                         type="button"
@@ -234,7 +234,7 @@ export function ErrandRequestForm() {
                     <FormLabel>Drop-off Location</FormLabel>
                      <div className="relative">
                       <FormControl>
-                        <Input placeholder="e.g., -1.313, 36.839" {...field} />
+                        <Input placeholder="e.g., Westlands" {...field} />
                       </FormControl>
                        <Button
                         type="button"

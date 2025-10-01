@@ -1,10 +1,9 @@
+
 import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ErrandRequestForm } from '@/components/errands/errand-request-form';
 import { Header } from '@/components/layout/header';
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find((img) => img.id === 'hero');
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
@@ -13,7 +12,7 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
-              <div className="flex items-start justify-center lg:order-2 lg:items-center">
+              <div className="flex flex-col items-start justify-center space-y-4 lg:order-2 lg:items-center">
                 <ErrandRequestForm />
               </div>
               <div className="flex flex-col justify-center space-y-4 lg:order-1">
@@ -25,17 +24,15 @@ export default function Home() {
                   parcel pickups, and let our trusted riders take care of it
                   for you.
                 </p>
-                {heroImage && (
                   <div className="relative mt-4 aspect-[16/10] w-full max-w-lg overflow-hidden rounded-xl shadow-lg">
                     <Image
-                      src={heroImage.imageUrl}
-                      alt={heroImage.description}
+                      src="/placeholder.jpg"
+                      alt="A person happily receiving a delivery package at their door."
                       fill
                       className="object-cover"
-                      data-ai-hint={heroImage.imageHint}
+                      data-ai-hint="delivery person"
                     />
                   </div>
-                )}
               </div>
             </div>
           </div>

@@ -1,3 +1,4 @@
+
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { firebaseConfig } from './firebase-config';
@@ -14,7 +15,7 @@ if (firebaseConfig && firebaseConfig.projectId && firebaseConfig.projectId !== '
   }
   db = getFirestore(app);
 } else {
-    console.error('Firebase project is not configured. Please add your Firebase configuration to src/lib/firebase-config.ts.');
+    console.log('Firebase project is not configured. Please add your Firebase configuration to src/lib/firebase-config.ts. App will run without database functionality.');
 }
 
 
